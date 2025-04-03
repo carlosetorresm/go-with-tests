@@ -1,15 +1,18 @@
 package iteration
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 const repeateCount = 5
 
 func Repeat(character string) string {
-	var repeated string
+	var repeated strings.Builder
 	for i := 0; i < repeateCount; i++ {
-		repeated += character
+		repeated.WriteString(character)
 	}
-	return repeated
+	return repeated.String()
 }
 
 func main() {
