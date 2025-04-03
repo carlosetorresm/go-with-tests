@@ -30,3 +30,9 @@ in order to prevent the compiler from eliminating the function call.
 ***To execute the benchmarks with memory allocation info***
 `go test -bench=. -benchmem`
 
+**COVERAGE**
+
+The coverage tool can help identify areas of the code not covered by tests.
+
+***To execute a coverage  analisis***
+`go test -cover`
