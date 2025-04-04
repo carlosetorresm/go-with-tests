@@ -26,6 +26,7 @@ When printing, or logging we can make use of the *FMT Package* placeholders
 `%b` -> representation of a base 2 *integer*.
 `%T` -> representation of the type of the value.
 `%d` -> representation of an *integer* value.
+`%p` -> prints moemory addresses in a 16 notation with leading `0x`.
 
 
 **TEST FUNCTIONS**
