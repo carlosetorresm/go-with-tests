@@ -2,6 +2,32 @@
 
 This repository works as a learning guide where we make every step with a TDD approach.
 
+**GO DOCUMENTATION**
+
+We can install the pkgsite in order to view the documentation locally with the follow command:
+
+`go install golang.org/x/pkgsite/cmd/pkgsite@latest`
+`pkgsite -open .`
+
+This command will download the source files from that repository and build them into an executable binary, for default in the *$HOME/go/bin* for Linux and MacOS.
+
+We will be able to acces the documentation navigating to.
+
+`http://localhost:8080/`
+
+
+**PLACEHOLDERS**
+
+When printing, or logging we can make use of the *FMT Package* placeholders
+
+`fmt.Println("this value is: %b", 20)`
+
+`%q` -> wraps value in double quotes.
+`%b` -> representation of a base 2 *integer*.
+`%T` -> representation of the type of the value.
+`%d` -> representation of an *integer* value.
+
+
 **TEST FUNCTIONS**
 
 Every test are supposed to be part of the package it's testing, also it must have the **_test.go** suffix.
