@@ -1,6 +1,6 @@
 # GO WITH TEST
 
-This repository works as a learning guide where we make every step with a TDD approach.
+This repository works as a learning guide where we made every step with a TDD approach.
 
 **GO DOCUMENTATION**
 
