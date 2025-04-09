@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"iter"
 	"os"
 	"time"
 )
@@ -16,12 +17,6 @@ type Sleeper interface {
 	Sleep()
 }
 
-type DefaultSleeper struct{}
-
-func (d *DefaultSleeper) Sleep() {
-	time.Sleep(1 * time.Second)
-}
-
 type ConfigurableSleeper struct {
 	duration time.Duration
 	sleep    func(time.Duration)
@@ -32,11 +27,21 @@ func (c *ConfigurableSleeper) Sleep() {
 }
 
 func Countdown(w io.Writer, sleeper Sleeper) {
-	for i := coundownStart; i > 0; i-- {
+	for i := range countDownFrom(coundownStart) {
 		fmt.Fprintln(w, i)
 		sleeper.Sleep()
 	}
 	fmt.Fprint(w, finalWord)
+}
+
+func countDownFrom(from int) iter.Seq[int] {
+	return func(yield func(int) bool) {
+		for i := from; i > 0; i-- {
+			if !yield(i) {
+				return
+			}
+		}
+	}
 }
 
 func main() {
