@@ -63,3 +63,10 @@ The coverage tool can help identify areas of the code not covered by tests.
 
 ***To execute a coverage  analisis***
 `go test -cover`
+
+**RACE DETECTOR**
+
+The `-race` flag allow us to check for any concurrency code problem
+
+***To execute the test with the race flag***
+`go test -race`
