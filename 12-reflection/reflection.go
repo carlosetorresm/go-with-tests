@@ -10,7 +10,9 @@ func walk(x any, fn func(string)) {
 
 	for i := range val.NumField() {
 		field := val.Field(i)
-		fn(field.String())
+		if field.Kind() == reflect.String {
+			fn(field.String())
+		}
 	}
 
 }

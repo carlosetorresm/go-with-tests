@@ -21,6 +21,11 @@ func TestWalk(t *testing.T) {
 				Name string
 				City string
 			}{"Carlos", "Mexico"}, []string{"Carlos", "Mexico"}},
+		{"struct with non string field",
+			struct {
+				Name string
+				Age  int
+			}{"Carlos", 29}, []string{"Carlos"}},
 	}
 
 	for _, test := range cases {
@@ -30,7 +35,7 @@ func TestWalk(t *testing.T) {
 				got = append(got, input)
 			})
 			if !reflect.DeepEqual(got, test.ExpectedCalls) {
-				t.Errorf("got %q, want %q", got[0], test.ExpectedCalls)
+				t.Errorf("got %q, want %q", got, test.ExpectedCalls)
 			}
 		})
 	}
