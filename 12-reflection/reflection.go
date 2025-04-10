@@ -28,12 +28,13 @@ func walk(x any, fn func(string)) {
 			walkValue(val.MapIndex(key))
 		}
 	case reflect.Chan:
-		for {
-			if v, ok := val.Recv(); ok {
-				walkValue(v)
-			} else {
-				break
-			}
+		for v, ok := val.Recv(); ok; v, ok = val.Recv() {
+			walkValue(v)
+		}
+	case reflect.Func:
+		valFNResult := val.Call(nil)
+		for _, res := range valFNResult {
+			walkValue(res)
 		}
 	}
 }
