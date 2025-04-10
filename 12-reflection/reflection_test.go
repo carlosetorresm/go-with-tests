@@ -38,6 +38,18 @@ func TestWalk(t *testing.T) {
 			}{"Carlos", 29}, []string{"Carlos"}},
 		{"struct nested field",
 			Person{"Carlos", Profile{29, "Mexico"}}, []string{"Carlos", "Mexico"}},
+		{"pointers to things",
+			&Person{"Carlos", Profile{29, "Mexico"}}, []string{"Carlos", "Mexico"}},
+		{"slices",
+			[]Profile{
+				{29, "Mexico"},
+				{34, "Reykjavik"},
+			}, []string{"Mexico", "Reykjavik"}},
+		{"arrays",
+			[2]Profile{
+				{29, "Mexico"},
+				{34, "Reykjavik"},
+			}, []string{"Mexico", "Reykjavik"}},
 	}
 
 	for _, test := range cases {
