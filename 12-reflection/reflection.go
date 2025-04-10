@@ -8,22 +8,25 @@ import "reflect"
 func walk(x any, fn func(string)) {
 	val := getValue(x)
 
-	numberOfValues := 0
-	var getField func(int) reflect.Value
+	walkValue := func(value reflect.Value) {
+		walk(value.Interface(), fn)
+	}
 
 	switch val.Kind() {
 	case reflect.String:
 		fn(val.String())
 	case reflect.Struct:
-		numberOfValues = val.NumField()
-		getField = val.Field
+		for i := range val.NumField() {
+			walkValue(val.Field(i))
+		}
 	case reflect.Slice, reflect.Array:
-		numberOfValues = val.Len()
-		getField = val.Index
-	}
-
-	for i := range numberOfValues {
-		walk(getField(i).Interface(), fn)
+		for i := range val.Len() {
+			walkValue(val.Index(i))
+		}
+	case reflect.Map:
+		for _, key := range val.MapKeys() {
+			walkValue(val.MapIndex(key))
+		}
 	}
 }
 
