@@ -5,13 +5,11 @@ import (
 	"errors"
 	"log"
 	"net/http"
-	"testing"
 	"time"
 )
 
 type SpyStore struct {
 	response string
-	t        *testing.T
 }
 
 func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
