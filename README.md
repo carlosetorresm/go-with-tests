@@ -70,3 +70,10 @@ The `-race` flag allow us to check for any concurrency code problem
 
 ***To execute the test with the race flag***
 `go test -race`
+
+**GO VET**
+
+Go Vet will alert of some subtle bugs in the code that we may miss
+
+***To execute the verification***
+`go vet`
