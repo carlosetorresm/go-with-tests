@@ -5,11 +5,21 @@ import (
 	"testing"
 )
 
+type Person struct {
+	Name    string
+	Profile Profile
+}
+
+type Profile struct {
+	Age  int
+	City string
+}
+
 func TestWalk(t *testing.T) {
 
 	cases := []struct {
 		Name          string
-		Input         interface{}
+		Input         any
 		ExpectedCalls []string
 	}{
 		{"struct with one string field",
@@ -26,6 +36,8 @@ func TestWalk(t *testing.T) {
 				Name string
 				Age  int
 			}{"Carlos", 29}, []string{"Carlos"}},
+		{"struct nested field",
+			Person{"Carlos", Profile{29, "Mexico"}}, []string{"Carlos", "Mexico"}},
 	}
 
 	for _, test := range cases {

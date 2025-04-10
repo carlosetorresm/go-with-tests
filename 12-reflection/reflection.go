@@ -10,9 +10,12 @@ func walk(x any, fn func(string)) {
 
 	for i := range val.NumField() {
 		field := val.Field(i)
-		if field.Kind() == reflect.String {
+
+		switch field.Kind() {
+		case reflect.String:
 			fn(field.String())
+		case reflect.Struct:
+			walk(field.Interface(), fn)
 		}
 	}
-
 }
