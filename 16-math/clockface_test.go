@@ -6,122 +6,90 @@ import (
 	"time"
 )
 
+type radModel struct {
+	time  time.Time
+	angle float64
+}
+type pointCase struct {
+	time  time.Time
+	point Point
+}
+
 func TestSecondsInRadians(t *testing.T) {
 
-	cases := []struct {
-		time  time.Time
-		angle float64
-	}{
+	cases := []radModel{
 		{simpleTime(0, 0, 30), math.Pi},
 		{simpleTime(0, 0, 0), 0},
 		{simpleTime(0, 0, 45), (math.Pi / 2) * 3},
 		{simpleTime(0, 0, 7), (math.Pi / 30) * 7},
 	}
-
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			got := secondsInRadians(c.time)
-
-			if got != c.angle {
-				t.Fatalf("Wanted %v radians but got %v", c.angle, got)
-			}
-		})
-	}
+	radiansTests(t, cases, SecondsInRadians)
 }
 
 func TestMinutesInRadians(t *testing.T) {
 
-	cases := []struct {
-		time  time.Time
-		angle float64
-	}{
+	cases := []radModel{
 		{simpleTime(0, 30, 0), math.Pi},
 		{simpleTime(0, 0, 7), 7 * (math.Pi / (30 * 60))},
 	}
-
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			got := minutesInRadians(c.time)
-
-			if got != c.angle {
-				t.Fatalf("Wanted %v radians but got %v", c.angle, got)
-			}
-		})
-	}
+	radiansTests(t, cases, MinutesInRadians)
 }
 func TestHoursInRadians(t *testing.T) {
 
-	cases := []struct {
-		time  time.Time
-		angle float64
-	}{
+	cases := []radModel{
 		{simpleTime(6, 0, 0), math.Pi},
 		{simpleTime(0, 0, 0), 0},
 		{simpleTime(21, 0, 0), math.Pi * 1.5},
 		{simpleTime(0, 1, 30), math.Pi / ((6 * 60 * 60) / 90)},
 	}
+	radiansTests(t, cases, HoursInRadians)
+}
 
+func TestSecondHandPoint(t *testing.T) {
+	cases := []pointCase{
+		{simpleTime(0, 0, 30), Point{0, -1}},
+		{simpleTime(0, 0, 45), Point{-1, 0}},
+	}
+	pointTests(t, cases, SecondHandPoint)
+}
+
+func TestMinuteHandPoint(t *testing.T) {
+	cases := []pointCase{
+		{simpleTime(0, 30, 0), Point{0, -1}},
+		{simpleTime(0, 45, 0), Point{-1, 0}},
+	}
+
+	pointTests(t, cases, MinuteHandPoint)
+}
+
+func TestHourHandPoint(t *testing.T) {
+	cases := []pointCase{
+		{simpleTime(6, 0, 0), Point{0, -1}},
+		{simpleTime(21, 0, 0), Point{-1, 0}},
+	}
+
+	pointTests(t, cases, HourHandPoint)
+}
+
+func radiansTests(t *testing.T, cases []radModel, toRad func(time.Time) float64) {
+	t.Helper()
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := hoursInRadians(c.time)
+			got := toRad(c.time)
 
-			if !roughlyEqualFloat64(got, c.angle) {
+			if got != c.angle {
 				t.Fatalf("Wanted %v radians but got %v", c.angle, got)
 			}
 		})
 	}
 }
 
-func TestSecondHandPoint(t *testing.T) {
-	cases := []struct {
-		time  time.Time
-		point Point
-	}{
-		{simpleTime(0, 0, 30), Point{0, -1}},
-		{simpleTime(0, 0, 45), Point{-1, 0}},
-	}
-
+func pointTests(t *testing.T, cases []pointCase, toPoint func(t time.Time) Point) {
+	t.Helper()
 	for _, c := range cases {
 		t.Run(testName(c.time), func(t *testing.T) {
-			got := secondHandPoint(c.time)
-			if !roughlyEqualPoint(got, c.point) {
-				t.Fatalf("Wanted %v Point, but got %v", c.point, got)
-			}
-		})
-	}
-}
+			got := toPoint(c.time)
 
-func TestMinuteHandPoint(t *testing.T) {
-	cases := []struct {
-		time  time.Time
-		point Point
-	}{
-		{simpleTime(0, 30, 0), Point{0, -1}},
-		{simpleTime(0, 45, 0), Point{-1, 0}},
-	}
-
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			got := minuteHandPoint(c.time)
-			if !roughlyEqualPoint(got, c.point) {
-				t.Fatalf("Wanted %v Point, but got %v", c.point, got)
-			}
-		})
-	}
-}
-
-func TestHourHandPoint(t *testing.T) {
-	cases := []struct {
-		time  time.Time
-		point Point
-	}{
-		{simpleTime(6, 0, 0), Point{0, -1}},
-		{simpleTime(21, 0, 0), Point{-1, 0}},
-	}
-
-	for _, c := range cases {
-		t.Run(testName(c.time), func(t *testing.T) {
-			got := hourHandPoint(c.time)
 			if !roughlyEqualPoint(got, c.point) {
 				t.Fatalf("Wanted %v Point, but got %v", c.point, got)
 			}
