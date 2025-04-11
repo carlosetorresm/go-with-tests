@@ -10,6 +10,11 @@ import (
 	blogposts "example.com/hello/17-reading-files"
 )
 
+const (
+	firstBody  = "Title: Post 1\nDescription: Description 1\nTags: tdd, go\n---\nHello\nWorld"
+	secondBody = "Title: Post 2\nDescription: Description 2\nTags: rust, borrow-checker\n---\nOne\nTwo\nThree"
+)
+
 type StubFailingFS struct {
 }
 
@@ -19,10 +24,6 @@ func (s StubFailingFS) Open(name string) (fs.File, error) {
 
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("open files", func(t *testing.T) {
-		const (
-			firstBody  = "Title: Post 1\nDescription: Description 1"
-			secondBody = "Title: Post 2\nDescription: Description 2"
-		)
 		fs := fstest.MapFS{
 			"hello world.md":  {Data: []byte(firstBody)},
 			"hello-world2.md": {Data: []byte(secondBody)},
@@ -39,7 +40,12 @@ func TestNewBlogPosts(t *testing.T) {
 		}
 
 		got := posts[0]
-		want := blogposts.Post{Title: "Post 1", Description: "Description 1"}
+		want := blogposts.Post{
+			Title:       "Post 1",
+			Description: "Description 1",
+			Tags:        []string{"tdd", "go"},
+			Body:        "Hello\nWorld",
+		}
 
 		assertPost(t, got, want)
 	})
