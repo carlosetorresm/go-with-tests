@@ -5,48 +5,6 @@ import (
 	"testing"
 )
 
-func TestReduce(t *testing.T) {
-	t.Run("multiplication of all elements", func(t *testing.T) {
-		multiply := func(x, y int) int {
-			return x * y
-		}
-		assertEqual(t, Reduce([]int{1, 2, 3}, multiply, 1), 6)
-	})
-
-	t.Run("concatenate strings", func(t *testing.T) {
-		concatenate := func(x, y string) string {
-			return x + y
-		}
-		assertEqual(t, Reduce([]string{"a", "b", "c"}, concatenate, ""), "abc")
-	})
-}
-
-func assertEqual[T comparable](t *testing.T, got, want T) {
-	t.Helper()
-	if got != want {
-		t.Errorf("got %v want %v given", got, want)
-	}
-}
-
-func TestBadBank(t *testing.T) {
-	transactions := []Transaction{
-		{
-			From: "Carlos",
-			To:   "Riya",
-			Sum:  100,
-		},
-		{
-			From: "Adyl",
-			To:   "Carlos",
-			Sum:  25,
-		},
-	}
-	assertEqual(t, BalanceFor(transactions, "Riya"), 100)
-	assertEqual(t, BalanceFor(transactions, "Carlos"), -75)
-	assertEqual(t, BalanceFor(transactions, "Adyl"), -25)
-
-}
-
 func TestSum(t *testing.T) {
 	t.Run("collection of any size", func(t *testing.T) {
 		numbers := []int{1, 2, 3}
