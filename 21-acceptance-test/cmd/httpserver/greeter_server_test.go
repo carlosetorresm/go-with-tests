@@ -2,17 +2,15 @@ package main_test
 
 import (
 	"context"
+	"net/http"
 	"testing"
+	"time"
 
 	"github.com/alecthomas/assert/v2"
 	go_specs_greet "github.com/carlosetorresm/go-with-tests/21-acceptance-test"
 	"github.com/carlosetorresm/go-with-tests/21-acceptance-test/specifications"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
-)
-
-const (
-	Port = "8080"
 )
 
 func TestGreeterServer(t *testing.T) {
@@ -24,7 +22,7 @@ func TestGreeterServer(t *testing.T) {
 			Dockerfile: "./cmd/httpserver/Dockerfile",
 		},
 		ExposedPorts: []string{"8080:8080"},
-		WaitingFor:   wait.ForHTTP("/").WithPort(Port),
+		WaitingFor:   wait.ForHTTP("/").WithPort("8080"),
 	}
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		ContainerRequest: req,
@@ -35,6 +33,9 @@ func TestGreeterServer(t *testing.T) {
 		assert.NoError(t, container.Terminate(ctx))
 	})
 
-	driver := go_specs_greet.Driver{BaseURL: "http://localhost:8080"}
+	client := http.Client{
+		Timeout: 1 * time.Second,
+	}
+	driver := go_specs_greet.Driver{BaseURL: "http://localhost:8080", Client: &client}
 	specifications.GreetSpecification(t, driver)
 }
