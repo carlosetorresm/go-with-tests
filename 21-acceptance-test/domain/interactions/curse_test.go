@@ -7,6 +7,6 @@ import (
 	"github.com/carlosetorresm/go-with-tests/21-acceptance-test/specifications"
 )
 
-func TestGreet(t *testing.T) {
-	specifications.GreetSpecification(t, specifications.GreetAdapter(interactions.Greet))
+func TestCurse(t *testing.T) {
+	specifications.CurseSpecification(t, specifications.CurseAdapter(interactions.Curse))
 }
