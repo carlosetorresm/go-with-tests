@@ -11,27 +11,22 @@ type Driver struct {
 }
 
 func (d Driver) Greet(name string) (string, error) {
-	res, err := http.Get(d.BaseURL + "/greet?name=" + name)
-	if err != nil {
-		return "", err
-	}
-	defer res.Body.Close()
-	greeting, err := io.ReadAll(res.Body)
-	if err != nil {
-		return "", err
-	}
-	return string(greeting), err
+	return d.getAndReadFrom(greetPath, name)
 }
 
 func (d Driver) Curse(name string) (string, error) {
-	res, err := http.Get(d.BaseURL + "/curse?name=" + name)
+	return d.getAndReadFrom(cursePath, name)
+}
+
+func (d Driver) getAndReadFrom(path string, name string) (string, error) {
+	res, err := http.Get(d.BaseURL + path + "?name=" + name)
 	if err != nil {
 		return "", err
 	}
 	defer res.Body.Close()
-	cursing, err := io.ReadAll(res.Body)
+	response, err := io.ReadAll(res.Body)
 	if err != nil {
 		return "", err
 	}
-	return string(cursing), nil
+	return string(response), nil
 }

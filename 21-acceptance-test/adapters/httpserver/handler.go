@@ -4,15 +4,26 @@ import (
 	"fmt"
 	"net/http"
 
-	interactions "github.com/carlosetorresm/go-with-tests/21-acceptance-test/domain/interactions"
+	"github.com/carlosetorresm/go-with-tests/21-acceptance-test/domain/interactions"
 )
 
-func GreetHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	fmt.Fprint(w, interactions.Greet(name))
+const (
+	greetPath = "/greet"
+	cursePath = "/curse"
+)
+
+func NewHandler() http.Handler {
+	serverMux := http.NewServeMux()
+
+	serverMux.HandleFunc(greetPath, replyWith(interactions.Greet))
+	serverMux.HandleFunc(cursePath, replyWith(interactions.Curse))
+
+	return serverMux
 }
 
-func CurseHandler(w http.ResponseWriter, r *http.Request) {
-	name := r.URL.Query().Get("name")
-	fmt.Fprint(w, interactions.Curse(name))
+func replyWith(f func(name string) (interaction string)) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := r.URL.Query().Get("name")
+		fmt.Fprint(w, f(name))
+	}
 }
