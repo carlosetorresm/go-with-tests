@@ -1,4 +1,4 @@
-package go_specs_greet_test
+package interactions_test
 
 import (
 	"testing"
