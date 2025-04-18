@@ -15,14 +15,15 @@ import (
 func StartDockerServer(
 	t testing.TB,
 	port string,
-	dockerFilePath string,
+	binToBuild string,
 ) {
 	ctx := context.Background()
 	t.Helper()
 	req := testcontainers.ContainerRequest{
 		FromDockerfile: testcontainers.FromDockerfile{
 			Context:    "../../.",
-			Dockerfile: dockerFilePath,
+			Dockerfile: "Dockerfile",
+			BuildArgs:  map[string]*string{"bin_to_build": &binToBuild},
 		},
 		ExposedPorts: []string{fmt.Sprintf("%s:%s", port, port)},
 		WaitingFor:   wait.ForListeningPort(nat.Port(port)).WithStartupTimeout(5 * time.Second),
