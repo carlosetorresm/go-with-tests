@@ -22,3 +22,16 @@ func (d Driver) Greet(name string) (string, error) {
 	}
 	return string(greeting), err
 }
+
+func (d Driver) Curse(name string) (string, error) {
+	res, err := http.Get(d.BaseURL + "/curse?name=" + name)
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+	cursing, err := io.ReadAll(res.Body)
+	if err != nil {
+		return "", err
+	}
+	return string(cursing), nil
+}
